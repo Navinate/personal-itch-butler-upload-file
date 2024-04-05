@@ -12,18 +12,19 @@ read version
 
 if [[ $target == "all" ]]; then
   for dir in */; do
-      # Check if it's a directory
-      if [ -d "$dir" ] && [ "$dir" != "zips/" ]; then
-          target_file=./zips/${dir%/}_${version}.zip
-          7z a -r $target_file ${dir%/}/*
-          butler push $target_file $username/$target --userversion $version
-      fi
+    clear
+    # Check if it's a directory
+    if [ -d "$dir" ] && [ "$dir" != "zips/" ]; then
+        target_file=./zips/${current_dir}_${dir%/}_${version}.zip
+        7z a -r $target_file ${dir%/}/*
+        butler push $target_file $username/$current_dir:${dir%/} --userversion $version
+    fi
   done
 else
   if [ -d "$target" ]; then
-    target_file=./zips/${target}_${version}.zip
-    7z a -r target_file $target/*
-    butler push target_file $username/$target --userversion $version
+    target_file=./zips/${current_dir}_${$target}_${version}.zip
+    7z a -r $target_file $target/*
+    butler push $target_file $username/$current_dir:$target --userversion $version
   else
     echo "Directory not found"
   fi
